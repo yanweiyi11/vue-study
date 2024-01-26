@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vue实例和容器的关系是一夫一妻制.html</title>
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+<div class="app">
+    <h1>{{msg}}</h1>
+</div>
+<div class="app">
+    <h1>{{msg}}</h1>
+</div>
+
+<div id="app2">
+    <h1>{{name}}</h1>
+</div>
+
+<script>
+    /**
+     * 示例：Vue 实例接管 DOM 容器
+     *
+     * 注意：一个 Vue 实例只能接管一个容器。
+     * 如果有多个相同选择器的容器，Vue 实例只会接管第一个匹配的容器。
+     * 一旦实例接管了一个容器，其他相同选择器的容器将不会被该实例接管。
+     */
+
+    // 第一个 Vue 实例，接管了第一个 class="app" 的容器
+    new Vue({
+        el: '.app',
+        data: {
+            msg: 'Hello Vue'
+        }
+    })
+
+    // 第二个 Vue 实例，接管了 id="app2" 的容器
+    new Vue({
+        el: '#app2',
+        data: {
+            name: 'zs'
+        }
+    })
+
+    // 第三个 Vue 实例尝试接管 id="app2" 的容器，但此容器已被第二个实例接管
+    // 因此，这个实例将不会有任何效果
+    new Vue({
+        el: '#app2',
+        data: {
+            name: 'ls'
+        }
+    })
+</script>
+</body>
+</html>

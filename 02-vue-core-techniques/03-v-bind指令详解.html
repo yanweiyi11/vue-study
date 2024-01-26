@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>v-bind指令详解（他是一个负责动态绑定的指令）</title>
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+    <!--
+        v-bind 指令详解
+        1. 这个指令的作用是什么？
+            它允许我们将HTML标签的某个属性的值设置为动态的，以实现数据绑定。
+        2. v-bind 指令的语法格式：
+            <HTML标签 v-bind:参数="表达式"></HTML标签>
+        3. v-bind 指令的编译原理：
+            编译前：
+                <HTML标签 v-bind:参数="表达式"></HTML标签>
+            编译后：
+                <HTML标签 参数="表达式的执行结果"></HTML标签>
+            注意两点：
+                在编译时，v-bind后面的“参数名”会被转换为HTML标签的属性名。
+                表达式会与data对象关联，当data中的数据发生变化时，表达式的执行结果也会随之变化，从而实现动态效果。
+        4. v-bind 的简写方式：
+            由于 v-bind 指令非常常用，Vue框架为其提供了简写形式，如下：
+                <img :src="imgPath">
+        5. 什么时候使用插值语法？什么时候使用指令？
+            当需要动态更新标签体（元素内容）时，使用插值语法。
+            当需要动态更新HTML标签的属性时，使用指令语法。
+    -->
+
+    <div id="app">
+        <!-- v-bind指令的使用案例 -->
+        <!-- 原则上v-bind指令后面的参数名可以随便写，但通常应该是HTML标签支持的属性名 -->
+
+        <!-- 注意：以下代码中msg是变量名 -->
+        <span v-bind:xyz="msg">1</span> <br>
+
+        <!-- 这个表达式是常量字符串，'msg' 不是变量 -->
+        <span v-bind:xyz="'msg'">2</span> <br>
+
+        <!-- v-bind实战演示 -->
+        <!-- 普通图片引用 -->
+        <img src="../img/1.jpg" alt=""> <br>
+        <!-- 使用v-bind动态绑定图片路径 -->
+        <img v-bind:src="imgPath" alt=""> <br>
+
+        <!-- v-bind简写形式 -->
+        <img :src="imgPath" alt=""> <br>
+
+        <!-- 普通文本框 -->
+        <input type="text" name="username" value="zhangsan"> <br>
+        <!-- 动态数据绑定文本框 -->
+        <input type="text" name="username" :value="username"> <br>
+
+        <!-- 使用v-bind动态绑定超链接地址 -->
+        <a href="https://www.baidu.com">走起</a> <br>
+        <a :href="url">走起2</a> <br>
+
+        <!-- 注意：属性内部的插值语法已被移除，应使用v-bind或冒号简写 -->
+        <!-- 错误的写法示例，不应使用插值语法在属性中 -->
+        <!-- <a href="{{ url }}">走起3</a> <br> -->
+    </div>
+
+    <script>
+        // Vue实例化
+        new Vue({
+            el: '#app',
+            data: {
+                msg: "Hello Vue",
+                imgPath: "../img/2.jpg",
+                username: "lisi",
+                url: "https://www.baidu.com"
+            }
+        })
+    </script>
+</body>
+</html>

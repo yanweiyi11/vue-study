@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>第一个Vue程序</title>
+    <!-- 安装Vue，当使用scrip进行Vue安装之后，上下文中就注册了一个全局变量：Vue -->
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+<!-- 指定Vue实例的挂载位置 -->
+<!-- <div id="app"></div> -->
+<hr>
+<div id="app"></div>
+
+<script>
+    /**
+     * 第一步：创建Vue实例
+     *
+     * 1. 为什么要使用 new Vue() 而不是直接调用 Vue() 函数？
+     *    使用 new Vue() 是必要的，因为 Vue 是一个构造函数。如果直接调用 Vue() 而不是通过 new 来创建实例，
+     *    将会出现错误：“Vue is a constructor and should be called with the 'new' keyword”。
+     *
+     * 2. 关于 Vue 构造函数的参数 options：
+     *    options 的中文翻译是“多个选项”，表示可以传递给 Vue 实例的配置对象。
+     *    Vue 要求 options 参数必须是一个纯粹的 JavaScript 对象（{}）。
+     *    在这个对象中，可以定义许多键值对，每个键值对代表一个配置项。
+     *    主要通过 options 参数来为 Vue 实例指定多个配置项。
+     *
+     * 3. 关于 template 配置项：
+     *    template 的中文翻译是“模板”，用于指定模板语句，它通常是一个字符串形式。
+     *    模板语句基于 Vue 框架的特殊语法规则，包括特殊的标记和结构。
+     *    编写模板语句时需遵循 Vue 的模板语法规范。
+     *    模板语句可以包含纯 HTML 代码、Vue 的特殊规则，或者二者结合。
+     *    template 后面的模板语句会被 Vue 框架的编译器进行编译，转换成浏览器能够识别的 HTML 代码。
+     */
+    const myVue = new Vue({
+        template: '<h1>Hello Vue!</h1>',
+    })
+
+    /**
+     * 第二步：将Vue实例挂载到id="app"的元素位置
+     *
+     * 1. Vue实例都有一个$mount()方法，这个方法的作用是什么？
+     *    $mount() 方法用于手动将 Vue 实例挂载到指定的位置。
+     *
+     * 2. #app 显然是id选择器，这个语法借鉴了 CSS。
+     */
+    myVue.$mount('#app');
+</script>
+</body>
+</html>
