@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Object.defineProperty()</title>
+</head>
+<body>
+    <!--
+         Object.defineProperty():
+         1. 这个方法是ES5新增的。
+         2. 作用：给对象新增属性或修改对象原有的属性。
+         3. 使用方法：Object.defineProperty(obj, 'propertyName', {配置项})
+             obj: 要在其上定义属性的对象。
+             propertyName: 要定义或修改的属性的名称。
+             配置项: 属性的描述符。
+
+         4. 配置项及其作用：
+             value: 设置属性的值。
+             writable: 布尔值，表示属性的值是否可以被重写。
+             get: 属性的getter方法，读取属性时自动调用。
+             set: 属性的setter方法，属性值被修改时自动调用。
+             注意：当使用getter和setter时，不应同时设置value和writable。
+     -->
+
+    <script>
+        // 定义一个普通对象
+        let phone = {};
+
+        // 临时变量，用于存储属性值
+        let tempColor;
+
+        // 使用Object.defineProperty()给phone对象定义一个color属性
+        Object.defineProperty(phone, 'color', {
+            // value: '太空灰',
+            // writable: true,
+
+            // getter方法
+            get: function () {
+                console.log("获取颜色");
+                return tempColor;
+            },
+            // setter方法
+            set: function (value) {
+                console.log("设置颜色为", value);
+                tempColor = value;
+            }
+        });
+
+        // 测试
+        console.log(phone.color); // 读取颜色，触发getter
+        phone.color = '红色';     // 修改颜色，触发setter
+        console.log(phone.color); // 再次读取颜色，触发getter
+    </script>
+</body>
+</html>

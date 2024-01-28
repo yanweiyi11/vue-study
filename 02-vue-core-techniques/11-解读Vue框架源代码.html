@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>解读Vue框架源代码</title>
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+    <!--
+        Vue框架源代码中关键性代码分析：
+
+        1. var data = vm.$options.data;
+           这行代码用于获取Vue实例的data选项。
+           执行到这里时，Vue实例(vm)上还没有_data属性。
+
+        2. data = vm._data = isFunction(data) ? getData(data, vm) : data || {}
+           此行代码的作用是初始化vm._data属性。
+           判断data是否为函数，若是，则通过getData函数获取data；若不是函数，则直接使用data。
+           然后将data的值赋给vm._data属性。
+           说明：Vue中的data可以是一个对象或一个返回对象的函数。
+
+           疑问解答：
+           为什么要给Vue实例(vm)扩展一个_data属性？
+           _data属性，以“_”开始，表明这是Vue框架内部使用的属性，可以视为私有属性。
+           Vue框架内部通过vm._data属性直接访问底层的真实data对象（例如：{name: 'zhangsan', age: 35}）。
+           访问vm._data上的属性不会触发数据代理机制，即不会走getter和setter方法。
+
+           注意点：
+           Vue实例vm不仅拥有_data属性，还有$data属性。
+           _data是框架内部使用的属性，而$data是Vue框架对外公开的属性，供开发者使用。
+           开发者如果想直接访问data中的数据，而不经过代理，可以使用$data属性，建议使用$data而非_data来访问这些数据。
+
+        3. 重点函数isReserved:
+           function isReserved(str) {
+               var c = (str + '').charCodeAt(0);
+               return c === 0x24 || c === 0x5f;
+           }
+           此函数用于判断字符串是否以下划线(_)或美元符号($)开头。
+           返回true表示以_或$开始，返回false表示不是。
+
+        4. proxy(vm, "_data", key);
+           通过此行代码将数据代理到Vue实例上。
+           key是数据对象的属性名。
+
+        5. 重点函数proxy:
+           function proxy(target, sourceKey, key) {
+               sharedPropertyDefinition.get = function proxyGetter() {
+                   return this[sourceKey][key]; // 例如：vm['_data']['age']
+               };
+               sharedPropertyDefinition.set = function proxySetter(val) {
+                   this[sourceKey][key] = val; // 例如：vm['_data']['age'] = val
+               };
+               Object.defineProperty(target, key, sharedPropertyDefinition);
+           }
+           此函数用于在Vue实例上定义一个代理属性。
+           通过Object.defineProperty方法将vm._data中的属性代理到Vue实例(vm)上。
+           这使得我们可以直接通过vm.key的方式访问或修改数据，而实际上是在操作vm._data[key]。
+    -->
+
+    <div id="app">
+        <h1>姓名：{{name}}</h1>
+        <h1>年龄：{{age}}</h1>
+    </div>
+
+    <script>
+
+        function isReserved(str) {
+            var c = (str + '').charCodeAt(0);
+            return c === 0x24 || c === 0x5f;
+        }
+
+        const vm = new Vue({
+            el: '#app',
+            data: {
+                name: 'zhangsan',
+                age: 35
+            }
+        });
+    </script>
+</body>
+</html>

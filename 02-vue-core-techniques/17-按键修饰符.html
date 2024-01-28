@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>按键修饰符</title>
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+    <!--
+         Vue.js 中常用的按键修饰符包括：
+            .enter - 回车键
+            .tab - 制表符键（仅在 keydown 事件中有效）
+            .delete - 删除键，同时捕获“删除”和“退格”键
+            .esc - 退出键
+            .space - 空格键
+            .up - 向上箭头键
+            .down - 向下箭头键
+            .left - 向左箭头键
+            .right - 向右箭头键
+
+        如何获取特定键的按键修饰符？
+            1. 通过 event.key 获取键的真实名称。
+            2. 将该名称转换为 kebab-case（短横线分隔）命名风格。
+               例如：PageUp 的真实名称，转换后为 page-up。
+
+        按键修饰符的自定义：
+            可以通过 Vue 的全局配置对象 vue.config.keyCodes 来自定义按键修饰符。
+            语法规则：
+                Vue.config.keyCodes.自定义按键修饰符名 = 键码值
+
+        系统修饰键：
+            包括 ctrl、alt、shift、meta。
+            对于 keydown 事件：按下任何一个系统修饰键即可触发事件。
+            对于 keyup 事件：需要按下特定的系统修饰键和组合键，释放组合键后才触发事件。
+    -->
+    <div id="app">
+        <h1>{{ msg }}</h1>
+        <label>
+            <!-- 使用内置按键修饰符和自定义按键修饰符来处理键盘事件 -->
+            <div>回车键：<input type="text" @keyup.enter="getInfo"></div>
+            <div>回车键（键值）：<input type="text" @keyup.13="getInfo"></div>
+            <div>delete键：<input type="text" @keyup.delete="getInfo"></div>
+            <div>esc键：<input type="text" @keyup.esc="getInfo"></div>
+
+            <!-- 注意：tab键无法触发keyup事件，只能触发keydown事件 -->
+            <div>tab键：<input type="text" @keydown.tab="getInfo"></div>
+            <div>PageUp键：<input type="text" @keyup.page-up="getInfo"></div>
+            <div>huiche键（自定义）：<input type="text" @keyup.huiche="getInfo"></div>
+            <div>ctrl键（keydown）：<input type="text" @keydown.ctrl="getInfo"></div>
+            <div>ctrl键（keyup）：<input type="text" @keyup.ctrl="getInfo"></div>
+            <div>ctrl + v键（keyup）：<input type="text" @keyup.ctrl.v="getInfo"></div>
+        </label>
+    </div>
+
+    <script>
+        // 自定义按键修饰符 .huiche 代表回车键
+        Vue.config.keyCodes.huiche = 13;
+
+        const vm = new Vue({
+            el: '#app',
+            data: {
+                msg: '按键修饰符'
+            },
+            methods: {
+                getInfo(event) {
+                    // 输出键盘事件和输入框的值
+                    console.log('Key pressed:', event.key);
+                    console.log('Input value:', event.target.value);
+                }
+            }
+        });
+    </script>
+</body>
+</html>

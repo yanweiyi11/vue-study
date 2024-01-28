@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>事件修饰符</title>
+    <script src="../js/vue.js"></script>
+    <style>
+        .divList{
+            width: 300px;
+            height: 200px;
+            background-color: aquamarine;
+            overflow: auto;
+        }
+        .item{
+            width: 300px;
+            height: 200px;
+        }
+    </style>
+</head>
+<body>
+    <!--
+        Vue中的事件修饰符：
+        - .stop：停止事件冒泡，相当于调用 event.stopPropagation()。
+        - .prevent：阻止事件的默认行为，相当于调用 event.preventDefault()。
+        - .capture：在事件监听器中使用事件捕获模式。有两种模式可以添加事件监听器：
+            - 冒泡模式：从内到外。
+            - 捕获模式：从外到内。
+        - .self：只当在事件的目标元素（即组件的根元素）上触发时才触发处理函数。
+        - .once：事件只触发一次。
+        - .passive：表明监听器永远不会调用 preventDefault()。如果监听器确实调用了这个方法，客户端将忽略它并抛出一个控制台警告。
+            - 注意：.passive 和 .prevent 是互斥的，不能同时使用。
+            - .prevent 用于阻止事件的默认行为。
+            - .passive 用于表明不会阻止事件的默认行为。
+    -->
+    <div id="app">
+        <h1>{{ msg }}</h1>
+
+        <!-- 阻止事件的默认行为 -->
+        <a href="https://www.baidu.com" @click.prevent="one">百度</a>
+        <br><br>
+
+        <!-- 停止事件冒泡 -->
+        <div @click="three">
+            <div @click.stop="two">
+                <button @click="one">事件冒泡</button>
+            </div>
+        </div>
+        <br>
+
+        <!-- 添加事件监听器时使用事件捕获模式 -->
+        <div @click.capture="three">
+            <div @click="two">
+                <button @click="one">添加事件监听器时使用事件捕获模式</button>
+            </div>
+        </div>
+        <br>
+
+        <!-- .self修饰符 -->
+        <div @click="three">
+            <div @click.self="two">
+                <button @click="one">self修饰符</button>
+            </div>
+        </div>
+        <br>
+
+        <!-- 事件修饰符可以多个联合使用 -->
+        <div @click="three">
+            <div @click="two">
+                <button @click.self.stop="one">self修饰符</button>
+            </div>
+        </div>
+        <br>
+
+        <!-- .once修饰符：事件发生一次 -->
+        <button @click.once="one">事件发生一次</button>
+        <br><br>
+
+        <!-- .passive修饰符 -->
+        <div class="divList" @wheel.passive="testPassive">
+            <div class="item">div1</div>
+            <div class="item">div2</div>
+            <div class="item">div3</div>
+        </div>
+    </div>
+
+    <script>
+        const vm = new Vue({
+            el: '#app',
+            data: {
+                msg: '事件修饰符'
+            },
+            methods: {
+                // 方法 one: 展示如何使用 .prevent 修饰符
+                one(event) {
+                    // 使用 .prevent 修饰符代替手动调用 event.preventDefault()
+                    alert("1");
+                },
+                // 方法 two: 响应点击事件，显示 "2"
+                two() {
+                    alert("2");
+                },
+                // 方法 three: 响应点击事件，显示 "3"
+                three() {
+                    alert("3");
+                },
+                // 方法 testPassive: 演示 .passive 修饰符的使用
+                testPassive(event) {
+                    for (let i = 0; i < 100000; i++) {
+                        console.log("test passive");
+                    }
+                    // .passive 修饰符意味着不会调用 preventDefault()
+                }
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>关于事件回调函数中的this</title>
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <h1>{{msg}}</h1>
+        <h1>计数器：{{counter}}</h1>
+        <!-- 直接在模板中操作数据 -->
+        <button @click="counter += 1">点击我+1</button>
+        <!-- 使用methods中定义的方法 -->
+        <button @click="add">点击我+1</button>
+        <!-- 使用箭头函数定义的方法（在这种情况下不推荐） -->
+        <button @click="add2">点击我+1（箭头函数）</button>
+    </div>
+
+    <script>
+        const vm = new Vue({
+            el: '#app',
+            data: {
+                msg: '关于事件回调函数中的this',
+                counter: 0,
+            },
+            methods: {
+                add() {
+                    // counter += 1 // 错误的
+                    // console.log(vm === this); // 测试Vue实例和this是否相同
+                    this.counter += 1 // 正确的用法
+                    // vm.counter += 1; // 也可以通过Vue实例直接操作
+                },
+                add2: () => {
+                    // console.log(vm === this); // 测试箭头函数中的this
+                    // this.counter += 1; // 错误的，箭头函数中没有自己的this
+                    // 箭头函数中没有this,箭头函数中的this是从父级作用域继承的
+                    // 对于当前程序来说，父级作用域是全局作用域，即window
+                    console.log(this)
+                }
+            }
+        });
+    </script>
+</body>
+</html>

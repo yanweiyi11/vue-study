@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>手写Vue框架数据代理的实现</title>
+    <!-- 移除原Vue框架的引用 -->
+    <!-- 安装自己的Vue实现 -->
+    <script src="../js/i-vue.js"></script>
+</head>
+<body>
+    <!-- 暂时注释掉视图部分，因为我们的IVue实现尚未包含视图更新的逻辑 -->
+    <!-- <div id="app">
+        <h1>{{msg}}</h1>
+    </div> -->
+
+    <script>
+        // 原本Vue的初始化方式，现在被注释掉
+        // const vm = new Vue({
+        //     el: '#app',
+        //     data: {
+        //         msg: 'Hello Vue',
+        //         name: 'zhangsan',
+        //         age: 30
+        //     }
+        // });
+
+        // 使用自定义的IVue类来创建实例
+        // 这里我们模拟Vue的数据代理功能，但不包括模板解析和响应式更新等功能
+        const vm = new IVue({
+            data: {
+                msg: 'Hello Vue',
+                _name: 'zhangsan', // 以_开头的属性不会被代理
+                $age: 30          // 以$开头的属性也不会被代理
+            }
+        });
+
+        // 以下是测试代码，用于验证数据代理是否工作
+        console.log(vm.msg);  // 应输出 "Hello Vue"
+        vm.msg = "New message";
+        console.log(vm.msg);  // 应输出 "New message"
+
+        // 尝试访问以$和_开头的属性，这些属性不会通过代理访问
+        console.log(vm._name);  // 应输出 undefined，因为_name不会被代理
+        console.log(vm.$age);   // 应输出 undefined，因为$age不会被代理
+    </script>
+
+</body>
+</html>

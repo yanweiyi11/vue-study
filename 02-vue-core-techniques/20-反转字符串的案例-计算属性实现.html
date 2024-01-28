@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>反转字符串的案例-计算属性实现</title>
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+    <!--
+        计算属性（Computed Properties）：
+            1. 定义：
+                计算属性是基于 Vue 实例的数据属性进行计算后得到的新属性。它们通常用于从现有数据派生出新的数据。
+                例如，可以将原有的 data 对象中的属性进行转换或计算，从而得到新的计算属性。
+
+            2. 使用方法：
+                在 Vue 实例中，计算属性通过一个名为 'computed' 的配置对象来定义。每个计算属性都可以包含 getter 和 setter 方法：
+                computed: {
+                    computedProperty1: {
+                        // 当读取 computedProperty1 时，会自动调用此 getter 方法
+                        get() {
+                            // 返回计算得到的值
+                        },
+                        // 当尝试修改 computedProperty1 时，会自动调用此 setter 方法
+                        set(value) {
+                            // 处理设置值的逻辑
+                        }
+                    },
+                    computedProperty2: {
+                        // 定义另一个计算属性
+                    }
+                    // 可以定义更多计算属性...
+                }
+
+            3. 作用与优势：
+                提高代码复用性：通过将复杂的逻辑封装在计算属性中，可以在多处重复使用。
+                增强代码可维护性：将逻辑集中在计算属性中，便于管理和维护。
+                提升执行效率：计算属性是基于它们的依赖进行缓存的。只有当依赖发生改变时，计算属性才会重新计算值。
+    -->
+
+    <div id="app">
+        <h1>{{msg}}</h1>
+        输入的信息：<input type="text" v-model="info"> <br>
+        <!-- 计算属性可在模板中像普通属性一样使用 -->
+        反转的信息（完整写法）：{{ reversedInfoFull }}<br>
+        反转的信息（简写形式）：{{ reversedInfoSimple }}<br>
+        <!-- 测试计算属性的缓存特性 -->
+        {{test}} <br>
+        {{test}} <br>
+        {{test}} <br>
+        <!-- 演示方法调用 -->
+        {{hello()}} <br>
+        {{hello()}} <br>
+        {{hello()}} <br>
+    </div>
+
+    <script>
+        const vm = new Vue({
+            el: '#app',
+            data: {
+                msg: '计算属性，反转字符串案例',
+                info: ''
+            },
+            methods: {
+                // 普通方法，每次调用都会执行
+                hello() {
+                    console.log("hello执行了")
+                    return "hello"
+                }
+            },
+            computed: {
+                // 定义计算属性
+                test: {
+                    // 计算属性的 getter 方法
+                    // get 方法的调用时机包括两个：
+                    // 1. 第一次访问这个属性的时候
+                    // 2. 该计算属性所关联的 Vue 原有属性的值发生变化时，get 方法会被重新调用一次
+                    get() {
+                        console.log("getter")
+                        // 依赖于 data 中的 info 属性
+                        return 'test ' + this.info
+                    },
+                    // 计算属性的 setter 方法
+                    set(val) {
+                        console.log("setter")
+                    }
+                },
+                // 完整写法的计算属性
+                reversedInfoFull: {
+                    // 另一个计算属性，用于将 info 字符串反转
+                    get() {
+                        return this.info.split('').reverse().join('');
+                    },
+                    // 当修改计算属性的时候，set方法被自动调用
+                    set(val) {
+                        console.log("set被调用");
+                        // 计算属性的值变还是不变，取决于计算属性关联的Vue原始属性的值
+                        // 也就是说，reversedInfo变还是不变，取决于info属性的值变不变。
+                        // 本质上：修改计算属性，实际上就是通过修改Vue的原始属性来实现的。
+                        this.info = val.split('').reverse().join('');
+                    }
+                },
+                // 简写形式：set不需要的时候才能简写
+                reversedInfoSimple() {
+                    return this.info.split('').reverse().join('');
+                }
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vue数据代理机制对属性名的要求</title>
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+    <!--
+        Vue实例属性命名规则：
+        1. Vue实例不会对以_和$开头的属性名进行数据代理。
+        2. 为什么？
+           如果允许对以_或$开头的属性名进行数据代理，
+           Vue实例（vm）上可能会出现_xxx或$xxx属性，
+           这可能会和Vue框架自身的属性名冲突。
+        3. 在Vue中，属性命名时应避免以_或$开头。
+    -->
+
+    <div id="app">
+        <h1>{{ msg }}</h1>
+    </div>
+
+    <script>
+        const vm = new Vue({
+            el: '#app',
+            data: {
+                msg: 'Hello Vue!',
+                _name: 'zhangsan',
+                $age: 20
+                // 尽量避免以_或$开头命名属性
+            }
+        });
+    </script>
+</body>
+</html>

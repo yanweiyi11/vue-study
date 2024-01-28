@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>methods实现原理</title>
+    <script src="../js/i-vue.js"></script>
+</head>
+<body>
+    <script>
+        // 1.methods对象中的方法可以通过vm去访问吗？ 可以。
+        // 2.methods对象中的方法有没有做数据代理呢？ 没有。
+
+        const vm = new IVue({
+            data: {
+                msg: 'Hello Vue'
+            },
+            methods: {
+                sayHi() {
+                    // console.log(this === vm) // true
+                    console.log(this.msg)
+                    alert("hi")
+                },
+                sayHello() {
+                    alert("hello")
+                },
+                sayWhat: () => {
+                    // console.log(this === vm) // false
+                    console.log(this) // Window
+                }
+            }
+        });
+    </script>
+</body>
+</html>

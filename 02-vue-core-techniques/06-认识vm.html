@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>认识vm</title>
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+    <!--
+        Vue实例中可以访问的属性类型：
+        1. 以$开头的属性：这些是公开属性，供开发者使用。
+        2. 以_开头的属性：这些是私有属性，主要由Vue框架内部使用，通常开发者不需要直接操作。
+        3. 原型对象上的属性：例如 vm.$delete 等。
+
+        Vue实现数据代理机制的基础是Object.defineProperty()方法。
+    -->
+
+    <div id="app">
+        <h1>{{ msg }}</h1>
+    </div>
+
+    <script>
+        let dataObj = {
+            msg: 'Hello Vue!'
+        };
+        const vm = new Vue({
+            el: '#app',
+            data: dataObj
+        });
+
+        // msg是dataObj对象的属性
+        console.log('dataObj的msg：', dataObj.msg);
+
+        // Vue使用数据代理机制，因此可以通过vm实例直接访问data中的属性
+        console.log('vm的msg：', vm.msg);
+    </script>
+</body>
+</html>
