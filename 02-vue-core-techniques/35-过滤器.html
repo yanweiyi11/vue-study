@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>过滤器</title>
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+    <!--
+        需求：从服务器端返回商品价格（可能为 ''、null、undefined、真实数字）。
+        要求：
+            如果是 ''、null 或 undefined，页面显示为 '-'
+            否则，显示真实数字。
+        在 Vue 3 中，过滤器语法已废弃。
+    -->
+
+    <div id="app">
+        <h1>{{ msg }}</h1>
+        <h2>商家价格：{{ formatPriceComputed }}</h2>
+        <h2>商家价格：{{ formatPriceMethods() }}</h2>
+        <h2>商家价格：{{ price | formatPriceFilter1 | formatPriceFilter2(3) }}</h2>
+        <input type="text" :value=" price | formatPriceFilter1 | formatPriceFilter2(3) ">
+    </div>
+
+    <div id="app2">
+        <h2>商家价格：{{ price | formatPriceFilter1 | formatPriceFilter2(3) }}</h2>
+    </div>
+
+    <script>
+        // 配置全局的过滤器
+        Vue.filter('formatPriceFilter1', function (val) {
+            // 判断是否为 ''、undefined 或 null，返回 '-'
+            if (val === '' || val === undefined || val === null) {
+                return '-';
+            }
+            // 否则返回原值
+            return val;
+        });
+
+        Vue.filter('formatPriceFilter2', function (val, number) {
+            // 确保传递过来的数据保留两位小数
+            return val.toFixed(number);
+        });
+
+        // 创建 Vue 实例 vm2
+        const vm2 = new Vue({
+            el: '#app2',
+            data: {
+                price: 200.2
+            }
+        });
+
+        // 创建 Vue 实例 vm
+        const vm = new Vue({
+            el: '#app',
+            data: {
+                msg: '过滤器',
+                price: 100.1,
+            },
+            computed: {
+                // 计算属性，用于格式化价格
+                formatPriceComputed() {
+                    // 判断是否为 ''、undefined 或 null，返回 '-'
+                    if (this.price === '' || this.price === undefined || this.price === null) {
+                        return '-';
+                    }
+                    // 否则返回原值
+                    return this.price;
+                }
+            },
+            methods: {
+                // 方法，用于格式化价格
+                formatPriceMethods() {
+                    // 判断是否为 ''、undefined 或 null，返回 '-'
+                    if (this.price === '' || this.price === undefined || this.price === null) {
+                        return '-';
+                    }
+                    // 否则返回原值
+                    return this.price;
+                }
+            },
+            filters: {
+                // 局部过滤器 formatPriceFilter1
+                formatPriceFilter1(val) {
+                    // 判断是否为 ''、undefined 或 null，返回 '-'
+                    if (val === '' || val === undefined || val === null) {
+                        return '-';
+                    }
+                    // 否则返回原值
+                    return val;
+                },
+
+                // 局部过滤器 formatPriceFilter2
+                formatPriceFilter2(val, number) {
+                    // 确保传递过来的数据保留两位小数
+                    return val.toFixed(number);
+                }
+            }
+        });
+    </script>
+</body>
+</html>

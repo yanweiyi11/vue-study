@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>列表排序</title>
+    <script src="../js/vue.js"></script>
+    <style>
+        th, td {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <h1>{{msg}}</h1>
+        <input type="text" v-model="keyword"><br>
+        <button @click="type = 1">升序</button>
+        <button @click="type = 2">降序</button>
+        <button @click="type = 0">原序</button>
+        <table>
+            <tr>
+                <th>序号</th>
+                <th>英雄</th>
+                <th>能量值</th>
+                <th>选择</th>
+            </tr>
+
+            <tr v-for="(hero, index) in filteredHeros" :key="hero.id">
+                <td>{{index + 1}}</td>
+                <td>{{hero.name}}</td>
+                <td>{{hero.power}}</td>
+                <td><input type="checkbox"></td>
+            </tr>
+        </table>
+    </div>
+
+    <script>
+        const vm = new Vue({
+            el: '#app',
+            data: {
+                type: 0,
+                keyword: '',
+                msg: '列表排序',
+                heros: [
+                    {id: '101', name: '艾格文', power: 8000},
+                    {id: '102', name: '萨尔', power: 6000},
+                    {id: '103', name: '古尔丹', power: 10000},
+                    {id: '104', name: '麦迪文', power: 9000},
+                ],
+            },
+            computed: {
+                filteredHeros() {
+                    // 执行过滤
+                    // sort 方法排序之后不会生成一个新的数组，是在原数组的基础之上进行排序，会影响原数组的结构
+                    return this.heros.filter((hero) => {
+                        return hero.name.indexOf(this.keyword) >= 0
+                    }).sort((a, b) => {
+                        if (this.type === 1) {
+                            return a.power - b.power;
+                        } else if (this.type === 2) {
+                            return b.power - a.power;
+                        }
+                    })
+                }
+            }
+        });
+    </script>
+</body>
+</html>

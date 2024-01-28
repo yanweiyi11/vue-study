@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vue的其它指令</title>
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <h1>{{ msg }} test</h1>
+        <!--
+          v-text指令:
+            将指令内容填充到标签体中，类似于 JavaScript 的 innerText。
+            填充以覆盖的形式进行，清空标签体原内容，然后填充新内容。
+            即使内容是 HTML 代码，不会解析执行，而是当作普通文本处理。
+        -->
+        <h1 v-text="msg">test</h1>
+        <h1 v-text="name">test</h1>
+        <h1 v-text="s1"></h1>
+
+        <!--
+            v-html指令:
+              与v-text类似，填充标签体内容，采用覆盖形式。
+              v-html会将内容作为 HTML 代码解析执行，类似于 JavaScript 的 innerHTML。
+         -->
+        <h1 v-html="s1"></h1>
+        <ul>
+            <li v-for="(val, idx) in messageList" :key="idx" v-html="val"></li>
+        </ul>
+        <textarea cols="50" rows="10" v-model.lazy="message"></textarea>
+        <br><br>
+        <button @click="save">保存留言</button>
+
+        <script>
+            const vm = new Vue({
+                el: '#app',
+                data: {
+                    msg: 'Vue的其它指令',
+                    name: 'jack',
+                    s1: '<h1>Hello Vue</h1>',
+                    message: '',
+                    messageList: []
+                },
+                methods: {
+                    save() {
+                        this.messageList.push(this.message);
+                        this.message = '';
+                    }
+                }
+            })
+        </script>
+    </div>
+</body>
+</html>

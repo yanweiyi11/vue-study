@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>比较大小的案例-watch实现</title>
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+
+    <div id="app">
+        <h1>{{ msg }}</h1>
+        数值1：<input type="number" v-model="num1"> <br>
+        数值2：<input type="number" v-model="num2"> <br>
+        比较大小：{{ compareResult }}
+    </div>
+
+    <script>
+        const vm = new Vue({
+            el: '#app',
+            data: {
+                msg: '比较大小的案例',
+                num1: 0,
+                num2: 0,
+                compareResult: ''
+            },
+            watch: {
+                // 监视 num1 属性的变化
+                num1: {
+                    immediate: true,
+                    handler(val) {
+                        let result = val - this.num2;
+
+                        // 以下代码段使用了异步函数 setTimeout。在 Vue 的响应式系统中，
+                        // 如果需要在数据变化后执行异步或延迟操作，应使用 watch 而非 computed。
+                        // 这里的箭头函数被 JS 引擎管理，而不是 Vue。由于箭头函数没有自身的 this，
+                        // 它会捕获其所在上下文（这里是 Vue 实例）的 this 值。
+                        setTimeout(() => {
+                            // 在箭头函数内部，this 指向 Vue 实例。
+                            console.log(this);
+
+                            if (result === 0) {
+                                this.compareResult = val + ' = ' + this.num2;
+                            } else if (result > 0) {
+                                this.compareResult = val + ' > ' + this.num2;
+                            } else {
+                                this.compareResult = val + ' < ' + this.num2;
+                            }
+                        }, 3000);
+
+                        // 同步处理逻辑的注释部分
+                        // if (result === 0) {
+                        //     this.compareResult = val + ' = ' + this.num2;
+                        // } else if (result > 0) {
+                        //     this.compareResult = val + ' > ' + this.num2;
+                        // } else {
+                        //     this.compareResult = val + ' < ' + this.num2;
+                        // }
+                    }
+                },
+
+                // 监视 num2 属性的变化
+                num2: {
+                    immediate: true,
+                    handler(val) {
+                        let result = this.num1 - val;
+
+                        // 在使用 setTimeout 的普通函数中，this 的值取决于函数的调用方式。
+                        // 在非箭头函数中，如果不绑定特定的上下文，this 默认指向全局对象（在浏览器中是 window）。
+                        setTimeout(function() {
+                            // 在此普通函数内部，this 指向全局对象（window），而非 Vue 实例。
+                            console.log(this);
+
+                            if (result === 0) {
+                                this.compareResult = this.num1 + ' = ' + val;
+                            } else if (result > 0) {
+                                this.compareResult = this.num1 + ' > ' + val;
+                            } else {
+                                this.compareResult = this.num1 + ' < ' + val;
+                            }
+                        }, 3000);
+
+                        // 同步处理逻辑的注释部分
+                        // if (result === 0) {
+                        //     this.compareResult = this.num1 + ' = ' + val;
+                        // } else if (result > 0) {
+                        //     this.compareResult = this.num1 + ' > ' + val;
+                        // } else {
+                        //     this.compareResult = this.num1 + ' < ' + val;
+                        // }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

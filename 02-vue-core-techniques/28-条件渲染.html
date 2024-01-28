@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>条件渲染</title>
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+
+    <div id="app">
+        <h1>{{msg}}</h1>
+        <!--
+             v-if 指令用于条件性地渲染一块内容。该指令的值应该是一个返回 true 或 false 的表达式：
+                 true：当表达式的值为 true 时，对应的元素或组件会被渲染到 DOM 中。
+                 false：当表达式的值为 false 时，对应的元素或组件不会被渲染到 DOM 中。这意味着，与 CSS 隐藏不同，这个元素在 DOM 中实际上是不存在的。
+
+             如果条件块内有状态保持或副作用操作（例如：input字段的值，定时器ID等），当使用 v-if 与 v-else 切换时，这些状态将被重新初始化。
+        -->
+        <div v-if="false">{{msg}}</div>
+
+        <button @click="counter++">点我加1</button>
+
+        <h3>{{counter}}</h3>
+
+        <img :src="imgPath1" v-if="counter % 2 === 0">
+        <!-- 使用 v-if 和 v-else 实现条件渲染。v-if 和 v-else 之间不能有其他元素或注释，否则 v-else 将不会被识别。 -->
+
+        <!-- 已注释的代码行展示了另一种使用 v-if 的方式，但这会导致每次条件变化时，都会重新创建和销毁 DOM 元素。 -->
+        <!-- <img :src="imgPath2" v-if="counter % 2 !== 0"> -->
+
+        <!-- 使用 v-else 指令可以提高效率，因为它避免了不必要的 DOM 创建和销毁。v-else 必须紧跟在 v-if 或 v-else-if 元素后面。 -->
+        <img :src="imgPath2" v-else>
+
+        <br><br>
+
+        温度：<input type="number" v-model="temperature"><br><br>
+        天气：
+        <!-- v-if v-else-if v-else 三者在使用的时候不能断开。 -->
+        <span v-if="temperature <= 10">寒冷</span>
+        <span v-else-if="temperature <= 25">凉爽</span>
+        <span v-else>炎热</span>
+
+        <br><br>
+
+        <!--
+            v-show 指令用于根据表达式的真值条件切换元素的显示状态：
+                它通过修改元素的 CSS 样式中的 display 属性来控制元素的显示和隐藏。
+                当表达式的值为 false 时，元素会被隐藏（display: none），但仍然保留在 DOM 中。
+
+            v-show 与 v-if 的选择指南：
+                1. 频繁切换显示状态：如果需要频繁地切换一个元素的显示状态，建议使用 v-show。因为 v-show 只是简单地修改 CSS，而不是在 DOM 中添加或删除元素，所以开销较小。
+                2. 初始渲染成本：v-if 有更低的初始渲染成本，因为它确保在初始渲染时只渲染真值条件为 true 的内容。如果有大量元素或组件的初始条件为 false，使用 v-if 可以提高初始加载性能。
+                3. DOM 的保留与销毁：v-if 会根据条件真假在 DOM 中添加或移除元素，而 v-show 只是切换元素的显示状态，元素始终保留在 DOM 中。
+
+            注意：v-show 不支持 <template> 标签，也不支持 v-else。
+        -->
+        <div v-show="false">你可以看到我吗？</div>
+
+        <!-- <template> 标签只是起到一个占位的作用，不会出现在页面上，也不会影响页面的结构。 -->
+        <template v-if="counter === 5">
+            <input type="text">
+            <input type="checkbox">
+            <input type="radio">
+        </template>
+    </div>
+
+    <script>
+        const vm = new Vue({
+            el: '#app',
+            data: {
+                msg: '条件渲染',
+                counter: 1,
+                imgPath1: '../img/1.jpg',
+                imgPath2: '../img/2.jpg',
+                temperature: 0
+            }
+        });
+    </script>
+</body>
+</html>

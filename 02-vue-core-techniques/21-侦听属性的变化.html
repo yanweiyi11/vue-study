@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>侦听/监听 属性的变化</title>
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+
+    <div id="app">
+        <h1>{{ msg }}</h1>
+        计数器：<input type="text" v-model="counter"> <br>
+        子属性1：<input type="text" v-model="complexObject.subProperty1"> <br>
+        子属性2：<input type="text" v-model="complexObject.subProperty2"> <br>
+        最终属性：<input type="text" v-model="complexObject.nestedObject.deeperObject.finalProperty"> <br>
+        后期监视计数器：<input type="text" v-model="secondaryCounter"> <br>
+    </div>
+
+    <script>
+        const vm = new Vue({
+            el: '#app',
+            data: {
+                msg: '侦听属性的变化',
+                counter: 0,
+                // complexObject 属性中，保存的值，是一个对象的内存地址
+                complexObject: {
+                    subProperty1: 0,
+                    subProperty2: 0,
+                    nestedObject: {
+                        deeperObject: {
+                            finalProperty: 0
+                        }
+                    }
+                },
+                secondaryCounter: 0
+            },
+            computed: {
+                formattedCounter() {
+                    return 'counter: ' + this.counter;
+                }
+            },
+            watch: {
+                // 监视 'counter' 属性
+                counter: {
+                    // 当组件初始化时，立即调用handler函数
+                    immediate: true,
+
+                    // handler方法在属性发生变化时自动调用，接收新值和旧值作为参数
+                    handler(newValue, oldValue) {
+                        console.log(newValue, oldValue);
+                        // 注意：若handler是箭头函数，则this指向window对象，不建议使用箭头函数
+                        console.log(this);
+                    }
+                },
+
+                // 监视 'complexObject.subProperty1'
+                'complexObject.subProperty1': {
+                    handler(newValue, oldValue) {
+                        console.log(newValue, oldValue);
+                    }
+                },
+
+                // 监视 'complexObject.subProperty2'
+                'complexObject.subProperty2': {
+                    handler(newValue, oldValue) {
+                        console.log(newValue, oldValue);
+                    }
+                },
+
+                // 监视 'complexObject' 属性，开启深度监视
+                complexObject: {
+                    deep: true,
+                    handler(newValue, oldValue) {
+                        console.log(newValue, oldValue);
+                    }
+                },
+
+                // 监视 'secondaryCounter' 属性（简写形式）
+                secondaryCounter(newVal, oldVal) {
+                    console.log(newVal, oldVal);
+                },
+
+                // 监视计算属性 'formattedCounter'
+                formattedCounter(newValue, oldValue) {
+                    console.log(newValue, oldValue);
+                }
+            }
+        });
+
+        // 如何在后期添加监视？通过调用Vue的$watch API实现。
+        // 语法：vm.$watch('要监视的属性名', 配置对象)
+
+        // 为 'secondaryCounter' 添加监视
+        vm.$watch('secondaryCounter', {
+            immediate: true, // 初始化时立即调用handler
+            deep: true,      // 开启深度监视
+            handler(newVal, oldVal) {
+                console.log(newVal, oldVal);
+            }
+        });
+
+        // 简写形式：直接使用函数作为第二个参数
+        vm.$watch('secondaryCounter', function(newVal, oldVal) {
+            console.log(newVal, oldVal);
+        });
+    </script>
+</body>
+</html>

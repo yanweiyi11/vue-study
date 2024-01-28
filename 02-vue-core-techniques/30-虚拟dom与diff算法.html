@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>虚拟dom与diff算法</title>
+    <script src="../js/vue.js"></script>
+    <style>
+        th, td {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <h1>{{msg}}</h1>
+        <table>
+            <tr>
+                <th>序号</th>
+                <th>英雄</th>
+                <th>能量值</th>
+                <th>选择</th>
+            </tr>
+            <!--
+                在使用 v-for 指令时，需要注意标签中的一个重要属性：
+                    :key
+
+                如果没有指定 :key 属性，系统会自动使用索引（index）作为 key。
+                但是，采用索引作为 key 存在一些问题：
+
+                问题：
+                    1. 效率低：当数据列表中的元素发生变化时，重新渲染时可能会导致效率低下。
+                    2. 错乱产生：特别是在对数组中的某些非末尾元素进行操作时，可能会导致错乱。
+
+                解决方法：
+                    建议使用对象的唯一标识（id）作为 key。
+
+                为什么使用对象的 id 作为 key 更好？
+                    1. 提高渲染效率：使用唯一标识作为 key，系统可以更快速地识别和更新元素。
+                    2. 避免错乱：确保每个元素都有唯一的标识，防止在操作中出现错乱情况。
+            -->
+            <tr v-for="(hero, index) in heros" :key="hero.id">
+                <td>{{index + 1}}</td>
+                <td>{{hero.name}}</td>
+                <td>{{hero.power}}</td>
+                <td><input type="checkbox"></td>
+            </tr>
+        </table>
+
+        <button @click="add">添加英雄</button>
+    </div>
+
+    <script>
+        const vm = new Vue({
+            el: '#app',
+            data: {
+                msg: '虚拟dom与diff算法',
+                heros: [
+                    {id: '101', name: 'p1', power: 10000},
+                    {id: '102', name: 'p2', power: 9000},
+                    {id: '103', name: 'p3', power: 8000},
+                    {id: '104', name: 'p4', power: 6000},
+                ]
+            },
+            methods: {
+                add() {
+                    this.heros.unshift({id: '100', name: 'p0', power: 11000},)
+                    // this.heros.push({id: '100', name: 'p0', power: 11000},)
+                }
+            }
+        });
+    </script>
+</body>
+</html>
