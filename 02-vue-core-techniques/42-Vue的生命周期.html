@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vue的生命周期</title>
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <h1>{{msg}}</h1>
+        <h3>计数器：{{counter}}</h3>
+        <h3 v-text="counter"></h3>
+        <button @click="add">加1</button>
+        <button @click="destroy">销毁</button>
+    </div>
+
+    <script>
+        const vm = new Vue({
+            el: '#app',
+            data: {
+                msg: 'Vue的生命周期',
+                counter: 1
+            },
+            methods: {
+                add(){
+                    this.counter++
+                },
+                destroy() {
+                    this.$destroy()
+                }
+            },
+            watch: {
+                counter(){
+                    console.log('count被监视一次')
+                }
+            },
+            /**
+             * 初始阶段：
+             * 	当 el 和 template 同时存在时，最终编译 template 模板语句。
+             * 	当 el 存在但 template 不存在时，最终编译 el 模板语句。
+             * 	当 el 不存在时，需要手动调用 vm.$mount(el) 进行手动挂载，然后流程才能继续。
+             *    	如果此时有 template，则最终编译 template 模板语句。
+             *    	如果此时没有 template，则最终编译 el 模板语句。
+             *
+             * 结论：
+             * 	流程要想继续，el 必须存在。
+             * 	当 el 和 template 同时存在时，优先选择 template，如果没有 template，才会选择 el。
+             */
+            beforeCreate() {
+                // 创建前
+                // 创建前指的是：数据代理和数据监测的创建前。
+                // 此时还无法访问 data 中的数据，包括 methods 也是无法访问的。
+                console.log('beforeCreate', this.counter);
+            },
+            created() {
+                // 创建后
+                // 创建后表示数据代理和数据监测创建完毕，可以访问 data 中的数据了，可以访问 methods 了。
+                console.log('created', this.counter);
+                // debugger
+            },
+            // 2.挂载阶段
+            beforeMount(){
+                // 挂载前
+                console.log('beforeMount')
+            },
+            mounted(){
+                // 挂载后
+                console.log('mounted')
+                console.log(this.$el)
+                console.log(this.$el instanceof HTMLElement)
+            },
+            // 3.更新阶段
+            beforeUpdate(){
+                // 更新前
+                console.log('beforeUpdate')
+            },
+            updated(){
+                // 更新后
+                console.log('updated')
+            },
+            // 4.销毁阶段
+            beforeDestroy(){
+                // 销毁前
+                console.log('beforeDestroy')
+                console.log(this);
+                this.counter = 1000
+            },
+            destroyed(){
+                // 销毁后
+                console.log('destroyed')
+                console.log(this);
+            }
+
+        });
+    </script>
+</body>
+</html>

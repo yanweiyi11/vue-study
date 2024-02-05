@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>测试el和template配置项</title>
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <h1>{{msg1}}</h1>
+    </div>
+
+    <script>
+        const vm = new Vue({
+            // el: '#app',
+            data: {
+                msg1: '测试el和template配置项',
+                msg2: 'template配置项'
+            },
+            template: '<h1>{{msg2}}</h1>'
+        });
+
+        // 手动挂载
+        vm.$mount('#app')
+    </script>
+</body>
+</html>

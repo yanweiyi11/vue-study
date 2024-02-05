@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>自定义指令</title>
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <h1>{{ msg }}</h1>
+        <div v-text-danger="msg"></div>
+        <!-- 自定义指令：v-bind-value -->
+        <div>
+            用户名：<input type="text" v-bind-value="username">
+        </div>
+    </div>
+
+    <hr>
+
+    <!-- 测试全局自定义指令的 Vue 实例 -->
+    <div id="app2">
+        <div v-text-danger="msg"></div>
+        <div>
+            用户名：<input type="text" v-bind-value="username">
+        </div>
+    </div>
+
+    <script>
+        // 全局自定义指令：text-danger（函数式）
+        Vue.directive('text-danger', function (element, binding) {
+            element.innerText = binding.value;
+            element.style.color = 'red';
+            // 在自定义指令中，this 不是 Vue 实例，而是 window 对象
+            console.log(this);
+        });
+
+        // 全局自定义指令：bind-value（对象式）
+        Vue.directive('bind-value', {
+            bind(element, binding) {
+                element.value = binding.value;
+            },
+            inserted(element, binding) {
+                // 设置父级元素背景色为蓝色
+                element.parentNode.style.backgroundColor = 'blue';
+            },
+            update(element, binding) {
+                element.value = binding.value;
+            }
+        });
+
+        const vm2 = new Vue({
+            el: '#app2',
+            data: {
+                msg: '全局自定义指令',
+                username: 'lucy'
+            }
+        });
+
+        const vm = new Vue({
+            el: '#app',
+            data: {
+                msg: '自定义指令',
+                username: 'jack'
+            },
+            directives: {
+                // 自定义指令示例
+                // 指令1
+                // 指令2
+                // ...
+                // 关于指令的命名规范：
+                //   1. v- 前缀可省略。
+                //   2. Vue官方建议指令的名称全部小写，多个单词使用 - 连接。
+
+                // 回调函数执行时机：
+                //   1. 指令和标签首次绑定。
+                //   2. 模板重新解析。
+
+                // 回调函数参数：
+                //   1. 真实的DOM元素。
+                //   2. 标签与指令之间绑定关系的对象。
+
+                // 函数式指令
+                // 'text-danger': function (element, binding) {
+                //     console.log('@');
+                //     element.innerText = binding.value;
+                //     element.style.color = 'red';
+                // },
+                // 'bind-value': function (element, binding) {
+                //     element.value = binding.value;
+                //     console.log(element.parentNode); // 注意：元素还未插入页面中。
+                //     element.parentNode.style.backgroundColor = 'blue';
+                // }
+
+                // 对象式指令
+                // 'bind-value': {
+                //     // 三个方法名固定，将在特定时间点自动调用（钩子函数）。
+                //     bind(element, binding) {
+                //         element.value = binding.value;
+                //     },
+                //     inserted(element, binding) {
+                //         element.parentNode.style.backgroundColor = 'blue';
+                //     },
+                //     update(element, binding) {
+                //         element.value = binding.value;
+                //     }
+                // }
+            }
+        });
+    </script>
+</body>
+</html>

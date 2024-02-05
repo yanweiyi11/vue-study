@@ -14,22 +14,27 @@ class IVue {
                 // 这些属性具有特殊的getter和setter
                 Object.defineProperty(this, propertyName, {
                     // getter函数在访问属性时被调用
+                    // 数据代理
                     get() {
                         // 当在IVue实例上访问该属性时，实际上返回的是data对象中对应属性的值
                         return options.data[propertyName];
                     },
                     // setter函数在属性值被修改时调用
+                    // 数据劫持
                     set(val) {
                         // 当在IVue实例上设置该属性的值时，实际上修改的是data对象中对应属性的值
+                        // set方法的作用：
+                        // 1. 修改内存中该对象的属性值
+                        // 2. 重新渲染页面
                         options.data[propertyName] = val;
                     }
                 });
             }
         });
-        // 获取所有的方法名
-        Object.keys(options.methods).forEach((methodName) => {
-            // 给当前的Vue实例扩展一个方法
-            this[methodName] = options.methods[methodName]
-        })
+        // // 获取所有的方法名
+        // Object.keys(options.methods).forEach((methodName) => {
+        //     // 给当前的Vue实例扩展一个方法
+        //     this[methodName] = options.methods[methodName]
+        // })
     }
 }

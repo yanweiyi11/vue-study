@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>响应式与数据劫持</title>
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <h1>{{msg}}</h1>
+        <div>姓名：{{name}}</div>
+        <div>年龄：{{age}}岁</div>
+        <div>数字：{{a.b.c.e}}</div>
+        <div>邮箱：{{a.email}}</div>
+    </div>
+
+
+    <script>
+        const vm = new Vue({
+            el: '#app',
+            data: {
+                msg: '响应式与数据劫持',
+                name: 'jack',
+                age: 20,
+                a: {
+                    b: {
+                        c: {
+                            e: 1
+                        }
+                    }
+                }
+            }
+        });
+
+        // 测试：后期给 Vue 实例动态追加的一些属性，是否会添加响应式处理？
+        // 目前来看，通过这种方式，后期给 vm 追加的属性并没有添加响应式处理。
+        // vm.$data.a.email = 'jack@126.com'
+
+        // 如果想给后期追加的属性添加响应式处理，可以使用以下两个方法之一：
+        // 1. Vue.set(目标对象, 属性名, 属性值)
+        // 2. Vue 实例.$set(目标对象, 属性名, 属性值)
+
+        // Vue.set(vm.a, 'email', 'jack@126.com')
+        // vm.$set(vm.a, 'email', 'jack@126.com')
+
+        // 错误：避免在运行时向 Vue 实例或其 $data 添加响应式。
+        // 不能直接给 vm / vm.$data 追加响应式属性，只能在声明时提前定义好。
+        // Vue.set(vm, 'x', 1)
+        // Vue.set(vm.$data, 'x', 1)
+    </script>
+</body>
+</html>

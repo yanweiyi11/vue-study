@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>vm与vc</title>
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+    <!--
+        Vue.extend({}) 返回一个全新的 VueComponent 构造函数。
+        每当使用 <user></user> 时，Vue 框架底层会自动调用该构造函数，通过 new 创建一个新的 VueComponent 实例。
+
+        注意：
+            Vue.extend() 创建的是一个 VueComponent 构造函数，而 Vue 实例通过 new Vue() 创建。
+            VueComponent 构造函数用于定义组件，而 Vue 实例则用于创建应用的根实例。
+            在组件中，this 指向 VueComponent 实例，而在根实例中，this 指向 Vue 实例。
+    -->
+
+    <div id="app">
+        <h1>{{ msg }}</h1>
+        <user></user>
+    </div>
+
+    <script>
+        // 这不是给 Vue 扩展 counter 属性。
+        // 这是给 Vue 的原型对象扩展一个 counter 属性。
+        Vue.prototype.counter = 1000;
+
+        // 创建组件
+        const user = Vue.extend({
+            template: `
+                <div>
+                  <h1>user 组件</h1>
+                </div>
+            `,
+            mounted() {
+                // this 是 VueComponent 实例
+                // user 是一个全新的 VueComponent 构造函数。
+                // console.log('vc', this === user)
+                // 为什么这样设计？为了代码复用。
+                // 底层实现原理：VueComponent.prototype.__proto__ = Vue.prototype
+                console.log('vc.counter: ', this.counter);
+            }
+        });
+
+        console.log('user.prototype.__proto__ === Vue.prototype: ', user.prototype.__proto__ === Vue.prototype)
+
+        // Vue 实例
+        const vm = new Vue({
+            el: '#app',
+            data: {
+                msg: 'vm 与 vc'
+            },
+            components: {
+                user
+            },
+            mounted() {
+                // this 是 Vue 实例
+                console.log('vm', this)
+            }
+        });
+
+        console.log('vm.counter: ', vm.counter);
+        // 本质上是这样的
+        console.log('vm.counter: ', vm.__proto__.counter);
+
+        /*
+        function test() {
+            return function () {
+                this.name = 'admin';
+            };
+        }
+
+        // 测试是否每次调用返回的都是不同的对象
+        let a = test();
+        // 通过构造函数创建对象
+        console.log(new a());
+
+        console.log(a)
+        let b = test()
+        console.log(b)
+        console.log(a === b) // false
+        */
+
+        // prototype 和 __proto__
+        // 构造函数（函数本身又是一种类型，代表 Vip 类型）
+        function Vip() {
+        }
+
+        // Vip 类型 / Vip 构造函数，有一个 prototype 属性。
+        // 这个 prototype 属性可以称为：显示的原型属性。
+        // 通过这个显示的原型属性可以获取：原型对象
+        // 获取 Vip 的原型对象
+        let x = Vip.prototype;
+
+        // 通过 Vip 可以创建实例
+        let a = new Vip();
+
+        // 对于实例来说，都有一个隐式的原型属性：__proto__
+        // 注意：显示的（建议程序员使用的），隐式的（不建议程序员使用的）。
+        // 这种方式也可以获取 Vip 的原型对象
+        let y = a.__proto__;
+
+        // 原型对象只有一个，其实原型对象都是共享的
+        console.log(x === y);
+
+        // 这不是给 Vip 扩展属性
+        // 这是给 Vip 的原型对象扩展属性
+        Vip.prototype.counter = 1000;
+
+        // 通过 a 实例可以访问这个扩展的 counter 属性吗？可以访问。为什么？原理是什么？
+        // 访问原理：首先去 a 实例去找 counter 属性，如果 a 实例上没有 counter 属性，会沿着 __proto__ 这个原型对象去找。
+        // 下面代码看起来表面上是 a 上有一个 counter 属性，实际上不是 a 实例上的属性，是 a 实例对应的原型对象上的属性 counter。
+        console.log(a.counter);
+    </script>
+</body>
+</html>
