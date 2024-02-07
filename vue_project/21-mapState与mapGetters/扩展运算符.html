@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ES6中的扩展运算符</title>
+</head>
+<body>
+    <script>
+        let arr = [1, 2, 3, 4, 5, 6, 6, 6];
+        // 使用扩展运算符(...)打印数组元素
+        console.log(...arr);
+
+        let o1 = {
+            x: 1,
+            y: 1
+        };
+        // 直接使用...o1会报错，因为扩展运算符不能单独用于对象字面量
+        // console.log(...o1); // SyntaxError: Unexpected token ...
+        // 使用({...o1})可以正确打印对象，因为它创建了一个o1的浅拷贝
+        console.log({...o1}); // {x: 1, y: 1}
+
+        // 创建o1的一个新浅拷贝o2，并验证它们是不同的对象
+        let o2 = {...o1};
+        console.log(o1 === o2); // false
+
+        // 使用扩展运算符合并多个对象的属性到一个新对象o6
+        let o3 = {x: 1, y: 1};
+        let o4 = {k: 1, f: 1};
+        let o5 = {m: 1, n: 1};
+        let o6 = {...o3, ...o4, ...o5};
+        console.log(o6); // {x: 1, y: 1, k: 1, f: 1, m: 1, ...}
+
+        // 合并对象时，后面的属性会覆盖前面相同属性名的值
+        let o7 = {x: 1, y: 1};
+        let o8 = {k: 1, ...o7, f: 1};
+        // o7的属性被插入到o8中，k和f保持原位
+        console.log(o8); // {k: 1, x: 1, y: 1, f: 1}
+    </script>
+</body>
+</html>

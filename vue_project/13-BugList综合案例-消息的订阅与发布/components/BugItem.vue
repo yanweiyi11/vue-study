@@ -12,7 +12,7 @@
 </template>
 
 <script>
-    import pubsub from "pubsub-js";
+    import pubsub from 'pubsub-js'
 
     export default {
         name: 'BugItem',
@@ -39,8 +39,8 @@
             updateDesc(bug, e) {
                 let newDesc = e.target.value.trim()
                 if (!newDesc) return
-                bug.desc = newDesc
                 // 发布消息
+                bug.desc = newDesc
                 pubsub.publish('updateDescCallback', bug)
                 bug.editState = false
             }

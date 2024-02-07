@@ -19,6 +19,7 @@
                         // 当读取 computedProperty1 时，会自动调用此 getter 方法
                         get() {
                             // 返回计算得到的值
+                            return ...
                         },
                         // 当尝试修改 computedProperty1 时，会自动调用此 setter 方法
                         set(value) {
@@ -38,19 +39,19 @@
     -->
 
     <div id="app">
-        <h1>{{msg}}</h1>
+        <h1>{{ msg }}</h1>
         输入的信息：<input type="text" v-model="info"> <br>
         <!-- 计算属性可在模板中像普通属性一样使用 -->
         反转的信息（完整写法）：{{ reversedInfoFull }}<br>
         反转的信息（简写形式）：{{ reversedInfoSimple }}<br>
         <!-- 测试计算属性的缓存特性 -->
-        {{test}} <br>
-        {{test}} <br>
-        {{test}} <br>
+        {{ test }} <br>
+        {{ test }} <br>
+        {{ test }} <br>
         <!-- 演示方法调用 -->
-        {{hello()}} <br>
-        {{hello()}} <br>
-        {{hello()}} <br>
+        {{ hello() }} <br>
+        {{ hello() }} <br>
+        {{ hello() }} <br>
     </div>
 
     <script>
