@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>第一个组件</title>
-    <script src="../js/vue.js"></script>
+    <script src="../resources/js/vue.js"></script>
 </head>
 <body>
     <!--
@@ -76,11 +76,11 @@
 
         const myComponent = {
             template: `
-              <ul>
-                <li v-for="(user, index) in users" :key="user.id">
-                  {{ index }}, {{ user.name }}
-                </li>
-              </ul>
+                <ul>
+                    <li v-for="(user, index) in users" :key="user.id">
+                        {{ index }}, {{ user.name }}
+                    </li>
+                </ul>
             `,
             data() {
                 return {
@@ -112,7 +112,7 @@
                     password: '',
                 }
             },
-            methods :{
+            methods: {
                 login() {
                     alert(this.username + ", " + this.password)
                 }

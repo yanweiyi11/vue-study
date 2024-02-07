@@ -3,60 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <title>template配置项详解.html</title>
-    <script src="../js/vue.js"></script>
+    <script src="../resources/js/vue.js"></script>
 </head>
 <body>
-<!-- 注意：以下代码是 Vue 框架特有的，是一个模板语句。这些代码需要由 Vue 框架编译后才能正确渲染。 -->
-<div id="app">
-    <div>
-        <h1>{{msg}}</h1>
-        <h1>{{name}}</h1>
+    <!-- 注意：以下代码是 Vue 框架特有的，是一个模板语句。这些代码需要由 Vue 框架编译后才能正确渲染。 -->
+    <div id="app">
+        <div>
+            <h1>{{msg}}</h1>
+            <h1>{{name}}</h1>
+        </div>
     </div>
-</div>
 
-<script>
-    /**
-     * Vue.config 是 Vue 的全局配置对象，用于控制 Vue 整体的行为。
-     * productionTip 属性用于设置是否在控制台显示生产环境的提示信息。
-     * 设置 productionTip 为 false 以阻止 Vue 在启动时生成生产提示。
-     * 默认情况下，该值为 true，表示会生成提示信息。
-     * 在生产环境中，通常设置为 false 以减少不必要的提示信息和提高性能。
-     */
-    Vue.config.productionTip = false;
+    <script>
+        /**
+         * Vue.config 是 Vue 的全局配置对象，用于控制 Vue 整体的行为。
+         * productionTip 属性用于设置是否在控制台显示生产环境的提示信息。
+         * 设置 productionTip 为 false 以阻止 Vue 在启动时生成生产提示。
+         * 默认情况下，该值为 true，表示会生成提示信息。
+         * 在生产环境中，通常设置为 false 以减少不必要的提示信息和提高性能。
+         */
+        Vue.config.productionTip = false;
 
-    /**
-     * 关于 template 配置项：
-     *  1. template 后面指定的是模板语句，模板语句中只能有一个根节点。
-     *  2. 只要 data 中的数据发生变化，模板语句会重新编译和渲染（即 data 变化会触发 template 的重新编译）。
-     *  3. 如果使用 template 配置项，指定挂载位置的元素将被替换。
-     *  4. 可以不使用 template 来编写模板语句，直接在 HTML 标签中编写，Vue 框架会自动找到并编译这些模板语句。
-     *  5. 如果直接将模板语句编写在 HTML 标签中，指定的挂载位置的内容不会被替换。
-     *
-     * 关于 el 配置项和 $mount('#app')：
-     *  6. 可以不使用 $mount('#app') 进行挂载。在 Vue 中有一个配置项 el，它和 $mount() 可以达到同样的效果。
-     *  7. el 配置项的作用是告诉 Vue 实例去接管哪个容器。
-     *     el: '#app' 表示让 Vue 实例去接管 id 为 'app' 的容器。
-     *     el 是 element 的缩写，被翻译为元素。
-     */
-    new Vue({
-        // 错误的写法，因为有多个根节点
-        // template: '<h1>{{msg}}</h1><h1>测试</h1>',
+        /**
+         * 关于 template 配置项：
+         *  1. template 后面指定的是模板语句，模板语句中只能有一个根节点。
+         *  2. 只要 data 中的数据发生变化，模板语句会重新编译和渲染（即 data 变化会触发 template 的重新编译）。
+         *  3. 如果使用 template 配置项，指定挂载位置的元素将被替换。
+         *  4. 可以不使用 template 来编写模板语句，直接在 HTML 标签中编写，Vue 框架会自动找到并编译这些模板语句。
+         *  5. 如果直接将模板语句编写在 HTML 标签中，指定的挂载位置的内容不会被替换。
+         *
+         * 关于 el 配置项和 $mount('#app')：
+         *  6. 可以不使用 $mount('#app') 进行挂载。在 Vue 中有一个配置项 el，它和 $mount() 可以达到同样的效果。
+         *  7. el 配置项的作用是告诉 Vue 实例去接管哪个容器。
+         *     el: '#app' 表示让 Vue 实例去接管 id 为 'app' 的容器。
+         *     el 是 element 的缩写，被翻译为元素。
+         */
+        new Vue({
+            // 错误的写法，因为有多个根节点
+            // template: '<h1>{{msg}}</h1><h1>测试</h1>',
 
-        // 正确的写法，只有一个根节点
-        // template:`
-        // <div>
-        //   <h1>{{msg}}</h1>
-        //   <h1>{{name}}</h1>
-        // </div>
-        // `,
+            // 正确的写法，只有一个根节点
+            // template:`
+            // <div>
+            //   <h1>{{msg}}</h1>
+            //   <h1>{{name}}</h1>
+            // </div>
+            // `,
 
-        data: {
-            msg: 'Hello Vue!',
-            name: 'zs!'
-        },
-        el: '#app'
-    });
-    // }).$mount('#app')
-</script>
+            data: {
+                msg: 'Hello Vue!',
+                name: 'zs!'
+            },
+            el: '#app'
+        });
+        // }).$mount('#app')
+    </script>
 </body>
 </html>
